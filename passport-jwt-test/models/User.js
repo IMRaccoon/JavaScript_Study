@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
-  email: {
+  username: {
     type: String,
     required: true,
   },
@@ -9,10 +9,24 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  name: {
-    type: String,
-    required: true,
+  admin: {
+    type: Boolean,
+    default: false,
   },
 });
 
-export default mongoose.model('users', UserSchema);
+UserSchema.statics.craete = function create({ username, password }) {
+  this.create({ username, password }).save();
+};
+
+UserSchema.statics.findOneByUsername = (username) =>
+  this.findOne({ username }).exec();
+
+UserSchema.methods.verify = (password) => this.password === password;
+
+UserSchema.methods.assignAdmin = () => {
+  this.admin = true;
+  return this.save();
+};
+
+export default mongoose.model('User', UserSchema);
