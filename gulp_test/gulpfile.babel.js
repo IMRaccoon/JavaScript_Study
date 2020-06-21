@@ -7,6 +7,7 @@ const route = {
   pug: {
     src: 'src/*.pug',
     dest: 'build',
+    watch: 'src/**/*.pug',
   },
 };
 
@@ -16,12 +17,16 @@ const pug = () =>
 const clean = () => del(['build']);
 
 const webserver = () =>
-  gulp.src('build').pipe(ws({ liverload: true, open: true }));
+  gulp.src('build').pipe(ws({ livereload: true, open: true }));
+
+const watch = () => {
+  gulp.watch(route.pug.watch, pug);
+};
 
 const prepare = gulp.series([clean]);
 
 const assets = gulp.series([pug]);
 
-const postDev = gulp.series([webserver]);
+const postDev = gulp.parallel([webserver, watch]);
 
 export const dev = gulp.series([prepare, assets, postDev]);
