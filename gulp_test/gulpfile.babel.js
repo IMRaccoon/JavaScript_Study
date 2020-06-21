@@ -1,14 +1,21 @@
 import gulp from 'gulp';
 import gpug from 'gulp-pug';
+import del from 'del';
 
 const route = {
   pug: {
-    src: 'src/**/*.pug',
+    src: 'src/*.pug',
     dest: 'build',
   },
 };
 
-export const pug = () =>
+const pug = () =>
   gulp.src(route.pug.src).pipe(gpug()).pipe(gulp.dest(route.pug.dest));
 
-export const dev = gulp.series([pug]);
+const clean = () => del(['build']);
+
+const prepare = gulp.series([clean]);
+
+const assets = gulp.series([pug]);
+
+export const dev = gulp.series([prepare, assets]);
