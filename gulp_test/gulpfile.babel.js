@@ -1,13 +1,18 @@
+import del from 'del';
 import gulp from 'gulp';
 import gpug from 'gulp-pug';
-import del from 'del';
 import ws from 'gulp-webserver';
+import image from 'gulp-image';
 
 const route = {
   pug: {
     src: 'src/*.pug',
     dest: 'build',
     watch: 'src/**/*.pug',
+  },
+  images: {
+    src: 'src/img/*',
+    dest: 'build/img',
   },
 };
 
@@ -21,9 +26,13 @@ const webserver = () =>
 
 const watch = () => {
   gulp.watch(route.pug.watch, pug);
+  gulp.watch(route.images.src, img);
 };
 
-const prepare = gulp.series([clean]);
+const img = () =>
+  gulp.src(route.images.src).pipe(image()).pipe(gulp.dest(route.images.dest));
+
+const prepare = gulp.series([clean, img]);
 
 const assets = gulp.series([pug]);
 
