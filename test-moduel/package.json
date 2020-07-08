@@ -6,11 +6,17 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "mocha -r ts-node/register ./**/*.test.ts"
+    "test": "mocha -r ts-node/register ./**/*.test.ts",
+    "start": "ts-node index.ts",
+    "prestart": "node es5.js",
+    "poststart": "babel-node es6.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.10.3",
+    "@babel/node": "^7.10.3",
+    "@babel/preset-env": "^7.10.3",
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "@types/pluralize": "0.0.29",
@@ -20,6 +26,7 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
+    "korean-to-english": "0.0.2-beta.2",
     "pluralize": "^8.0.0"
   }
 }
