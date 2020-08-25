@@ -22,3 +22,11 @@ JavaScript에서 특별하게 사용하는 모듈들을 테스트 하기 위한 
 
 - Graph QL 로 영화 API 만들기
 - 참고 : https://academy.nomadcoders.co/courses/357405/lectures/5476213
+
+<br />
+
+### Gulp
+
+- pug 과 Gulp 튜토리얼
+
+<br />
