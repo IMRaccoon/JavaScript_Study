@@ -6,10 +6,9 @@ import {
   Model,
   Table,
   UpdatedAt,
-} from 'sequelize-typescript';
-import { Scode, Shop } from '.';
+} from "sequelize-typescript";
+import { Scode, Shop } from ".";
 
-// TODO : 실제로 삭제되는 것이 아니기 때문에 삭제 작업을 해주어야 한다.
 @Table({ paranoid: true })
 export default class ScodeOrder extends Model<ScodeOrder> {
   @ForeignKey(() => Scode)
@@ -40,30 +39,28 @@ export default class ScodeOrder extends Model<ScodeOrder> {
   @Column({ defaultValue: 0 })
   orderType: number;
 
-  // TODO : Parcel 관련 작업은 따로 진행할 것
-  @Column({ defaultValue: '' })
+  @Column({ defaultValue: "" })
   parcel_name: string;
 
-  @Column({ defaultValue: '' })
+  @Column({ defaultValue: "" })
   parcel_number: string;
 
-  // TODO : 통일화 시키기
-  @Column({ defaultValue: '' })
+  @Column({ defaultValue: "" })
   marketPickup: string;
 
-  @Column({ defaultValue: '' })
+  @Column({ defaultValue: "" })
   orderStatus: string;
 
-  @Column({ defaultValue: '' })
+  @Column({ defaultValue: "" })
   parcel_cost: string;
 
   @Column({ defaultValue: false })
   productRelease: boolean;
 
-  @Column({ defaultValue: '' })
+  @Column({ defaultValue: "" })
   orderMemo: string;
 
-  @Column({ defaultValue: '' })
+  @Column({ defaultValue: "" })
   forwardMemo: string;
 
   @CreatedAt

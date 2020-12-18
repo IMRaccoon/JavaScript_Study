@@ -5,10 +5,9 @@ import {
   ForeignKey,
   Model,
   Table,
-} from 'sequelize-typescript';
-import { Shop } from '.';
+} from "sequelize-typescript";
+import { Shop } from ".";
 
-// TODO : 실제로 삭제되는 것이 아니기 때문에 삭제 작업을 해주어야 한다.
 @Table({ paranoid: true })
 export default class ScodeTemp extends Model<ScodeTemp> {
   @Column({ primaryKey: true, unique: true })
@@ -23,10 +22,10 @@ export default class ScodeTemp extends Model<ScodeTemp> {
   @Column({ allowNull: false })
   phone: string;
 
-  @Column({ defaultValue: '' })
+  @Column({ defaultValue: "" })
   address1: string;
 
-  @Column({ defaultValue: '' })
+  @Column({ defaultValue: "" })
   address2: string;
 
   @ForeignKey(() => Shop)

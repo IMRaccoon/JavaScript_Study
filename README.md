@@ -14,14 +14,14 @@ JavaScript에서 특별하게 사용하는 모듈들을 테스트 하기 위한 
 ### TypeScript Blockchain
 
 - TypeScript를 활용하여 블록체인 개발
-- 참고 : https://academy.nomadcoders.co/courses/303219/lectures/4975930
+- 참고 : https://nomadcoders.co/typescript-for-beginners
 
 <br/>
 
 ### GraphQL Movie API
 
 - Graph QL 로 영화 API 만들기
-- 참고 : https://academy.nomadcoders.co/courses/357405/lectures/5476213
+- 참고 : https://nomadcoders.co/graphql-for-beginners
 
 <br />
 
@@ -30,3 +30,15 @@ JavaScript에서 특별하게 사용하는 모듈들을 테스트 하기 위한 
 - pug 과 Gulp 튜토리얼
 
 <br />
+
+### Sequelize
+
+- ORM(Object-Relational-Mapping) 사용해보기
+- Typescript 환경에서 Sequelize-Typescript 모듈 사용해보기
+
+<br/ >
+
+### Next.JS
+
+- NestJS로 API 만들기
+- 참고: https://nomadcoders.co/nestjs-fundamentals/lobby
