@@ -8,13 +8,7 @@ JavaScript에서 특별하게 사용하는 모듈들을 테스트 하기 위한 
 
 - passport 모듈을 활용하여 express 서버에서 JWT 기반 회원인증 구현
 - 참고 : https://velopert.com/2448
-
-<br/>
-
-### TypeScript Blockchain
-
-- TypeScript를 활용하여 블록체인 개발
-- 참고 : https://nomadcoders.co/typescript-for-beginners
+- [코드](./passport-jwt-test/)
 
 <br/>
 
@@ -22,12 +16,14 @@ JavaScript에서 특별하게 사용하는 모듈들을 테스트 하기 위한 
 
 - Graph QL 로 영화 API 만들기
 - 참고 : https://nomadcoders.co/graphql-for-beginners
+- [코드](./graphql-API/)
 
 <br />
 
 ### Gulp
 
 - pug 과 Gulp 튜토리얼
+- [코드](./gulp_test/)
 
 <br />
 
@@ -35,6 +31,7 @@ JavaScript에서 특별하게 사용하는 모듈들을 테스트 하기 위한 
 
 - ORM(Object-Relational-Mapping) 사용해보기
 - Typescript 환경에서 Sequelize-Typescript 모듈 사용해보기
+- [코드](./sequelize/)
 
 <br/ >
 
@@ -42,3 +39,11 @@ JavaScript에서 특별하게 사용하는 모듈들을 테스트 하기 위한 
 
 - NestJS로 API 만들기
 - 참고: https://nomadcoders.co/nestjs-fundamentals/lobby
+- [코드](./nestjs-study)
+
+<br />
+
+### GraphQL Movie Web App
+
+- React, Graph QL 로 영와 웹 앱 만들기
+- 참고: https://nomadcoders.co/react-graphql-for-beginners/lobby
