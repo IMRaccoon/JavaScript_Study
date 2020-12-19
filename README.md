@@ -48,3 +48,16 @@ nodejs 또는 Typescript에서 사용하는 모듈들을 테스트, 스터디 �
 - React, Apollo Graph QL 로 영와 웹 앱 만들기
 - 참고: https://nomadcoders.co/react-graphql-for-beginners/lobby
 - [코드](./apollo-study)
+
+<br />
+
+### Uber Eats Clone
+
+- Language: Nodejs, Typescript
+- Front: React, Apollo
+- Back: NestJS, TypeORM, GraphQL, PostgreSQL
+- Testing: Jest, Cypress, React Testing Library
+- Deploy: Netify, Heroku
+
+- 참고: https://nomadcoders.co/nuber-eats/lobby
+- [코드](./uber-eats)
