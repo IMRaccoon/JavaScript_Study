@@ -1,6 +1,6 @@
 # JavaScript_Study
 
-JavaScript에서 특별하게 사용하는 모듈들을 테스트 하기 위한 repository입니다.
+nodejs 또는 Typescript에서 사용하는 모듈들을 테스트, 스터디 하기 위한 repository입니다.
 
 <br/>
 
@@ -33,7 +33,7 @@ JavaScript에서 특별하게 사용하는 모듈들을 테스트 하기 위한 
 - Typescript 환경에서 Sequelize-Typescript 모듈 사용해보기
 - [코드](./sequelize/)
 
-<br/ >
+<br />
 
 ### Next.JS
 
@@ -45,5 +45,6 @@ JavaScript에서 특별하게 사용하는 모듈들을 테스트 하기 위한 
 
 ### GraphQL Movie Web App
 
-- React, Graph QL 로 영와 웹 앱 만들기
+- React, Apollo Graph QL 로 영와 웹 앱 만들기
 - 참고: https://nomadcoders.co/react-graphql-for-beginners/lobby
+- [코드](./apollo-study)
