@@ -15,6 +15,7 @@ import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { Verification } from './users/entities/verification.entity';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -29,6 +30,9 @@ import { Verification } from './users/entities/verification.entity';
         DB_PASSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
         PRIVATE_KEY: Joi.string().required(),
+        MAILGEN_API_KEY: Joi.string().required(),
+        MAILGEN_DOMAIN_NAME: Joi.string().required(),
+        MAILGEN_FROM_EMAIL: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRoot({
@@ -50,6 +54,11 @@ import { Verification } from './users/entities/verification.entity';
     UsersModule,
     CommonModule,
     AuthModule,
+    MailModule.forRoot({
+      apiKey: process.env.MAILGEN_API_KEY,
+      fromEmail: process.env.MAILGEN_FROM_EMAIL,
+      domain: process.env.MAILGEN_DOMAIN_NAME,
+    }),
   ],
   controllers: [],
   providers: [],

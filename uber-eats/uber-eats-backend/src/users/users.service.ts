@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from 'src/jwt/jwt.service';
+import { MailService } from 'src/mail/mail.service';
 import { Repository } from 'typeorm';
 import {
   CreateAccountInput,
@@ -20,6 +21,7 @@ export class UsersService {
     @InjectRepository(Verification)
     private readonly verifications: Repository<Verification>,
     private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
   ) {}
 
   async createAccount({
@@ -35,9 +37,10 @@ export class UsersService {
       const user = await this.users.save(
         this.users.create({ email, password, role }),
       );
-      await this.verifications.save(
+      const verification = await this.verifications.save(
         this.verifications.create({ code: '', user }),
       );
+      this.mailService.sendVerificationEmail(user.email, verification.code);
       return { ok: true };
     } catch (e) {
       return { ok: false, error: "Couldn't create account" };
@@ -81,14 +84,18 @@ export class UsersService {
     { email, password }: EditProfileInput,
   ): Promise<EditProfileOutput> {
     try {
-      const user = await this.users.findOne({ id });
+      const user = await this.users.findOne(id);
       if (!user) {
         return { ok: false, error: 'User Not Found' };
       }
+      console.log(user);
       if (email) {
         user.email = email;
         user.verified = false;
-        await this.verifications.save(this.verifications.create({ user }));
+        const verification = await this.verifications.save(
+          this.verifications.create({ user }),
+        );
+        this.mailService.sendVerificationEmail(user.email, verification.code);
       }
       if (password) {
         user.password = password;
