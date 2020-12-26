@@ -10,12 +10,12 @@ export class MailService {
     @Inject(CONFIG_OPTIONS) private readonly options: MailModuleOptions,
   ) {}
 
-  private async sendEmail(
+  async sendEmail(
     subject: string,
     to: string,
     template: string,
     mailVars: MailVars,
-  ) {
+  ): Promise<boolean> {
     const form = new FormData();
     form.append(
       'from',
@@ -25,20 +25,23 @@ export class MailService {
     form.append('subject', subject);
     form.append('template', template);
     Object.keys(mailVars).forEach((key) =>
-      !!key ? form.append(`v:${key}`, mailVars[key]) : null,
+      form.append(`v:${key}`, mailVars[key]),
     );
     try {
-      await got(`https://api.mailgun.net/v3/${this.options.domain}/messages`, {
-        headers: {
-          Authorization: `Basic ${Buffer.from(
-            `api:${this.options.apiKey}`,
-          ).toString('base64')}`,
+      await got.post(
+        `https://api.mailgun.net/v3/${this.options.domain}/messages`,
+        {
+          headers: {
+            Authorization: `Basic ${Buffer.from(
+              `api:${this.options.apiKey}`,
+            ).toString('base64')}`,
+          },
+          body: form,
         },
-        method: 'POST',
-        body: form,
-      });
+      );
+      return true;
     } catch (error) {
-      console.error('?', error);
+      return false;
     }
   }
 
