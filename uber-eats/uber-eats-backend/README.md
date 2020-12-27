@@ -11,7 +11,7 @@ The Backend of Uber Eats Clone
 - password
 - role(client | owner | delivery)
 
-## User CRUD:
+## User Resolver:
 
 - Create Account
 - Log In
@@ -25,3 +25,18 @@ The Backend of Uber Eats Clone
 - category
 - address
 - coverImage
+
+## Restuarant Resolver:
+
+- Create Restaurant
+- Edit Restaurant
+- Delete Restaurant
+
+- See Categories
+- See Restaurants by Category (pagination)
+- See Restaurants (pagination)
+- See Restaurant
+
+- Create Dish
+- Edit Dish
+- Delete Dish
