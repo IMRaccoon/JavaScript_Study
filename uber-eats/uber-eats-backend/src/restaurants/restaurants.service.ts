@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CoreOutput } from 'src/common/dto/output.dto';
 import { EditProfileOutput } from 'src/users/dtos/edit-profile.dto';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -7,9 +8,14 @@ import {
   CreateRestaurantInput,
   CreateRestaurantOutput,
 } from './dto/create-restaurant.dto';
+import {
+  DeleteRestaurantInput,
+  DeleteRestaurantOutput,
+} from './dto/delete-restaurant.dto';
 import { EditRestaurantInput } from './dto/edit-restaurant.dto';
 import { Category } from './entities/category.entity';
 import { Restaurant } from './entities/restaurant.entity';
+import { FindRestaurantOutput } from './interfaces/find-restaurant.interface';
 import { CategoryRepository } from './repositories/category.repository';
 
 @Injectable()
@@ -46,14 +52,12 @@ export class RestaurantsService {
     editRestaurantInput: EditRestaurantInput,
   ): Promise<EditProfileOutput> {
     try {
-      const restaurant = await this.restaurants.findOne(
+      const { ok, error } = await this.findRestaurant(
         editRestaurantInput.restaurantId,
+        owner.id,
       );
-      if (!restaurant) {
-        return { ok: false, error: 'Could not find Restaurant' };
-      }
-      if (restaurant.ownerId !== owner.id) {
-        return { ok: false, error: 'Not Owned Restaurant' };
+      if (!ok) {
+        return { ok, error };
       }
 
       let category: Category = null;
@@ -73,6 +77,40 @@ export class RestaurantsService {
       return { ok: true };
     } catch (error) {
       return { ok: false };
+    }
+  }
+
+  async deleteRestaurant(
+    owner: User,
+    { restaurantId }: DeleteRestaurantInput,
+  ): Promise<DeleteRestaurantOutput> {
+    try {
+      const { ok, error } = await this.findRestaurant(restaurantId, owner.id);
+      if (!ok) {
+        return { ok, error };
+      }
+      await this.restaurants.delete(restaurantId);
+      return { ok: true };
+    } catch (error) {
+      return { ok: false, error: 'Could not delete' };
+    }
+  }
+
+  async findRestaurant(
+    restaurantId: number,
+    ownerId: number,
+  ): Promise<FindRestaurantOutput> {
+    try {
+      const restaurant = await this.restaurants.findOne(restaurantId);
+      if (!restaurant) {
+        return { ok: false, error: 'Could not find Restaurant' };
+      }
+      if (restaurant.ownerId !== ownerId) {
+        return { ok: false, error: 'Not Owned Restaurant' };
+      }
+      return { ok: true, restaurant };
+    } catch (error) {
+      return { ok: false, error: 'Database Error' };
     }
   }
 }
