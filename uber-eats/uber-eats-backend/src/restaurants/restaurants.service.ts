@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { EditProfileOutput } from 'src/users/dtos/edit-profile.dto';
 import { User } from 'src/users/entities/user.entity';
-import { Repository } from 'typeorm';
+import { Raw } from 'typeorm';
 import { AllCategoriesOutput } from './dto/all-categories.dto';
 import { CategoryInput, CategoryOutput } from './dto/category.dto';
 import {
@@ -14,17 +13,21 @@ import {
   DeleteRestaurantOutput,
 } from './dto/delete-restaurant.dto';
 import { EditRestaurantInput } from './dto/edit-restaurant.dto';
+import { RestaurantInput, RestaurantOutput } from './dto/restaurant.dto';
 import { RestaurantsInput, RestaurantsOutput } from './dto/restaurants.dto';
+import {
+  SearchRestaurantInput,
+  SearchRestaurantOutput,
+} from './dto/search-restaurant.dto';
 import { Category } from './entities/category.entity';
-import { Restaurant } from './entities/restaurant.entity';
 import { FindRestaurantOutput } from './interfaces/find-restaurant.interface';
 import { CategoryRepository } from './repositories/category.repository';
+import { RestaurantRepository } from './repositories/restaurant.repository';
 
 @Injectable()
 export class RestaurantsService {
   constructor(
-    @InjectRepository(Restaurant)
-    private readonly restaurants: Repository<Restaurant>,
+    private readonly restaurants: RestaurantRepository,
     private readonly categories: CategoryRepository,
   ) {}
 
@@ -107,6 +110,7 @@ export class RestaurantsService {
       if (!restaurant) {
         return { ok: false, error: 'Could not find Restaurant' };
       }
+
       if (restaurant.ownerId !== ownerId) {
         return { ok: false, error: 'Not Owned Restaurant' };
       }
@@ -138,17 +142,17 @@ export class RestaurantsService {
       if (!category) {
         return { ok: false, error: 'Category not found' };
       }
-      const restaurants = await this.restaurants.find({
-        where: { category },
-        take: 25,
-        skip: (page - 1) * 25,
-      });
-      const totalResult = await this.countRestaurants(category);
+      const [
+        restaurants,
+        totalResults,
+        totalPage,
+      ] = await this.restaurants.findAndCountPages(page, { category });
       return {
         ok: true,
         category,
         restaurants,
-        totlaPages: Math.ceil(totalResult / 25),
+        totalPage,
+        totalResults,
       };
     } catch {
       return { ok: false, error: 'Could not load category' };
@@ -157,13 +161,53 @@ export class RestaurantsService {
 
   async allRestaurants({ page }: RestaurantsInput): Promise<RestaurantsOutput> {
     try {
-      const [restaurants, totalResult] = await this.restaurants.findAndCount({
-        skip: (page - 1) * 25,
-        take: 25,
-      });
-      return { ok: true, totlaPages: Math.ceil(totalResult / 25), restaurants };
+      const [
+        results,
+        totalResults,
+        totalPage,
+      ] = await this.restaurants.findAndCountPages(page);
+      return {
+        ok: true,
+        totalPage,
+        results,
+        totalResults,
+      };
     } catch {
       return { ok: false, error: 'Could not load restaurants' };
+    }
+  }
+
+  async findRestaurantById({
+    restaurantId,
+  }: RestaurantInput): Promise<RestaurantOutput> {
+    try {
+      const restaurant = await this.restaurants.findOneOrFail(restaurantId);
+      return { ok: true, restaurant };
+    } catch {
+      return { ok: false, error: 'Could not find restaurant' };
+    }
+  }
+
+  async searchRestaurantByName({
+    query,
+    page,
+  }: SearchRestaurantInput): Promise<SearchRestaurantOutput> {
+    try {
+      const [
+        restaurants,
+        totalResults,
+        totalPage,
+      ] = await this.restaurants.findAndCountPages(page, {
+        name: Raw((name) => `${name} ILIKE '%${query}%'`),
+      });
+      return {
+        ok: true,
+        totalPage,
+        totalResults,
+        restaurants,
+      };
+    } catch {
+      return { ok: false, error: 'Could not search for restaurants' };
     }
   }
 }

@@ -24,7 +24,12 @@ import {
   EditRestaurantInput,
   EditRestaurantOutput,
 } from './dto/edit-restaurant.dto';
+import { RestaurantInput, RestaurantOutput } from './dto/restaurant.dto';
 import { RestaurantsInput, RestaurantsOutput } from './dto/restaurants.dto';
+import {
+  SearchRestaurantOutput,
+  SearchRestaurantInput,
+} from './dto/search-restaurant.dto';
 import { Category } from './entities/category.entity';
 import { Restaurant } from './entities/restaurant.entity';
 import { RestaurantsService } from './restaurants.service';
@@ -68,6 +73,29 @@ export class RestuarantsResolver {
       deleteRestaurantInput,
     );
   }
+
+  @Query(() => RestaurantsOutput)
+  async restaurants(
+    @Args('input') restaurantsInput: RestaurantsInput,
+  ): Promise<RestaurantsOutput> {
+    return this.restaurantsService.allRestaurants(restaurantsInput);
+  }
+
+  @Query(() => RestaurantOutput)
+  async restaurant(
+    @Args('input') restaurantInput: RestaurantInput,
+  ): Promise<RestaurantOutput> {
+    return this.restaurantsService.findRestaurantById(restaurantInput);
+  }
+
+  @Query(() => SearchRestaurantOutput)
+  async searchRestaurant(
+    @Args('input') searchRestaurantInput: SearchRestaurantInput,
+  ): Promise<SearchRestaurantOutput> {
+    return this.restaurantsService.searchRestaurantByName(
+      searchRestaurantInput,
+    );
+  }
 }
 
 @Resolver(() => Category)
@@ -75,7 +103,7 @@ export class CategoryResolver {
   constructor(private readonly restaurantsService: RestaurantsService) {}
 
   @ResolveField(() => Int)
-  restaurantCount(@Parent() category: Category): Promise<number> {
+  async restaurantCount(@Parent() category: Category): Promise<number> {
     return this.restaurantsService.countRestaurants(category);
   }
 
@@ -89,12 +117,5 @@ export class CategoryResolver {
     @Args('input') categoryInput: CategoryInput,
   ): Promise<CategoryOutput> {
     return this.restaurantsService.findCategoryBySlug(categoryInput);
-  }
-
-  @Query(() => RestaurantsOutput)
-  restaurants(
-    @Args('input') restaurantsInput: RestaurantsInput,
-  ): Promise<RestaurantsOutput> {
-    return this.restaurantsService.allRestaurants(restaurantsInput);
   }
 }
