@@ -77,6 +77,7 @@ import { UsersModule } from './users/users.module';
       domain: process.env.MAILGEN_DOMAIN_NAME,
     }),
     OrdersModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],
