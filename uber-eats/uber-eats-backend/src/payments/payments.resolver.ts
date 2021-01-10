@@ -14,7 +14,7 @@ import { PaymentService } from './payments.service';
 export class PaymentResolver {
   constructor(private readonly paymentService: PaymentService) {}
 
-  @Mutation(() => CreatePaymentInput)
+  @Mutation(() => CreatePaymentOutput)
   @Role(['Owner'])
   async createPayment(
     @AuthUser() owner: User,
