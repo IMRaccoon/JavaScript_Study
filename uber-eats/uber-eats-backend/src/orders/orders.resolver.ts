@@ -3,12 +3,18 @@ import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 import { AuthUser } from 'src/auth/auth-user.decorator';
 import { Role } from 'src/auth/role.decorator';
-import { PUB_SUB } from 'src/common/common.constants';
+import {
+  NEW_COOKED_ORDER,
+  NEW_ORDER_UPDATE,
+  NEW_PENDING_ORDER,
+  PUB_SUB,
+} from 'src/common/common.constants';
 import { User } from 'src/users/entities/user.entity';
 import { CreateOrderInput, CreateOrderOutput } from './dto/create-order.dto';
 import { EditOrderInput, EditOrderOutput } from './dto/edit-order.dto';
 import { GetOrderInput, GetOrderOutput } from './dto/get-order.dto';
 import { GetOrdersInput, GetOrdersOutput } from './dto/get-orders.dto';
+import { OrderUpdatesInput } from './dto/order-update.dto';
 import { Order } from './entities/order.entity';
 import { OrderService } from './orders.service';
 
@@ -54,21 +60,42 @@ export class OrderResolver {
     return this.orderService.editOrder(user, editOrderInput);
   }
 
-  @Mutation(() => Boolean)
-  async potatoReady(@Args('potatoId') potatoId: number) {
-    await this.pubsub.publish('hotPotatos', {
-      readyPotato: potatoId,
-    });
-    return true;
+  @Subscription(() => Order, {
+    filter: ({ pendingOrders: { ownerId } }, _, { user }) => {
+      return ownerId === user.id;
+    },
+    resolve: ({ pendingOrders: { order } }) => order,
+  })
+  @Role(['Owner'])
+  async pendingOrders() {
+    return this.pubsub.asyncIterator(NEW_PENDING_ORDER);
   }
 
-  @Subscription(() => String, {
-    filter: ({ readyPotato }, { potatoId }) => readyPotato === potatoId,
-    resolve: ({ readyPotato }) =>
-      `Your potato with the id ${readyPotato} is ready!`,
+  @Subscription(() => Order)
+  @Role(['Delivery'])
+  async cookedOrders() {
+    return this.pubsub.asyncIterator(NEW_COOKED_ORDER);
+  }
+
+  @Subscription(() => Order, {
+    filter: (
+      { orderUpdates: order }: { orderUpdates: Order },
+      { input }: { input: OrderUpdatesInput },
+      { user }: { user: User },
+    ) => {
+      if (
+        [order.driverId, order.customerId, order.restaurant.ownerId].includes(
+          user.id,
+        ) &&
+        order.id === input.id
+      ) {
+        return true;
+      }
+      return false;
+    },
   })
   @Role(['Any'])
-  async readyPotato(@Args('potatoId') patatoId: number) {
-    return this.pubsub.asyncIterator('hotPotatos');
+  async orderUpdates(@Args('input') _: OrderUpdatesInput) {
+    return this.pubsub.asyncIterator(NEW_ORDER_UPDATE);
   }
 }
