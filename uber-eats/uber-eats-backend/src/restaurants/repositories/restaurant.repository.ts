@@ -21,6 +21,7 @@ export class RestaurantRepository extends Repository<Restaurant> {
     try {
       const [restuarants, totalResults] = await this.findAndCount({
         ...(where && { where }),
+        order: { isPromoted: 'DESC' },
         skip: (page - 1) * this.pageIndex,
         take: this.pageIndex,
       });
