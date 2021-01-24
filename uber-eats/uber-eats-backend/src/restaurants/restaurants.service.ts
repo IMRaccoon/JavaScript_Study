@@ -152,13 +152,13 @@ export class RestaurantsService {
       const [
         restaurants,
         totalResults,
-        totalPage,
+        totalPages,
       ] = await this.restaurants.findAndCountPages(page, { category });
       return {
         ok: true,
         category,
         restaurants,
-        totalPage,
+        totalPages,
         totalResults,
       };
     } catch {
@@ -171,11 +171,11 @@ export class RestaurantsService {
       const [
         results,
         totalResults,
-        totalPage,
+        totalPages,
       ] = await this.restaurants.findAndCountPages(page);
       return {
         ok: true,
-        totalPage,
+        totalPages,
         results,
         totalResults,
       };
@@ -205,13 +205,13 @@ export class RestaurantsService {
       const [
         restaurants,
         totalResults,
-        totalPage,
+        totalPages,
       ] = await this.restaurants.findAndCountPages(page, {
         name: Raw((name) => `${name} ILIKE '%${query}%'`),
       });
       return {
         ok: true,
-        totalPage,
+        totalPages,
         totalResults,
         restaurants,
       };
