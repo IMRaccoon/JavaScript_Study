@@ -8,7 +8,7 @@ import { Restaurant } from '../entities/restaurant.entity';
 
 @EntityRepository(Restaurant)
 export class RestaurantRepository extends Repository<Restaurant> {
-  private readonly pageIndex: number = 25;
+  private readonly pageIndex: number = 3;
 
   async findAndCountPages(
     page: number,

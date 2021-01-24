@@ -31,6 +31,7 @@ export class Restaurant extends CoreEntity {
   @ManyToOne(() => Category, (category) => category.restaurants, {
     nullable: true,
     onDelete: 'NO ACTION',
+    eager: true,
   })
   category: Category;
 
