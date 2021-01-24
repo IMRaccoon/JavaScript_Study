@@ -1,4 +1,4 @@
-import { gql, useApolloClient, useMutation } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useMe } from "../../hooks/useMe";
@@ -17,23 +17,12 @@ const VERIFY_EMAIL_MUTATION = gql`
 `;
 
 export const ConfirmEmail = () => {
-  const { data: useData } = useMe();
-  const client = useApolloClient();
+  const { data: useData, refetch } = useMe();
   const history = useHistory();
 
-  const onCompleted = ({ verifyEmail: { ok } }: verifyEmail) => {
+  const onCompleted = async ({ verifyEmail: { ok } }: verifyEmail) => {
     if (ok && useData?.me.id) {
-      client.writeFragment({
-        id: `User:${useData.me.id}`,
-        fragment: gql`
-          fragment VerifiedUser on User {
-            verified
-          }
-        `,
-        data: {
-          verified: true,
-        },
-      });
+      await refetch();
       history.push("/");
     }
   };
