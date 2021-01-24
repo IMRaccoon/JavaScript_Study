@@ -1,4 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
+import Helmet from "react-helmet";
 import { useForm } from "react-hook-form";
 import { FormError } from "../components/form-error";
 import {
@@ -8,6 +9,7 @@ import {
 import uberLogo from "../images/logo.svg";
 import { Button } from "../components/button";
 import { Link } from "react-router-dom";
+import { isLoggedInVar } from "../apollo";
 
 const LOGIN_MUTATION = gql`
   mutation loginMutation($loginInput: LoginInput!) {
@@ -35,6 +37,7 @@ export const Login = () => {
   const onCompleted = ({ login: { ok, token } }: loginMutation) => {
     if (ok) {
       console.log(token);
+      isLoggedInVar(true);
     }
   };
 
@@ -52,6 +55,9 @@ export const Login = () => {
 
   return (
     <div className="h-screen flex items-center flex-col pt-10 lg:mt-28">
+      <Helmet>
+        <title>Login | Uber Eats</title>
+      </Helmet>
       <div className="w-full max-w-screen-sm flex flex-col px-10 items-center">
         <img src={uberLogo} className="w-48 mb-10 font-medium" alt="logo" />
         <h4 className="w-full text-left text-3xl mb-10">Welcom back</h4>
@@ -60,7 +66,11 @@ export const Login = () => {
           className="grid gap-3 mt-5 w-full mb-3"
         >
           <input
-            ref={register({ required: "Email is required" })}
+            ref={register({
+              required: "Email is required",
+              // eslint-disable-next-line no-useless-escape
+              pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            })}
             type="email"
             name="email"
             required
@@ -70,13 +80,16 @@ export const Login = () => {
           {errors.email?.message && (
             <FormError errorMessage={errors.email?.message} />
           )}
+          {errors.email?.type === "pattern" && (
+            <FormError errorMessage="Please enter a valid email" />
+          )}
           <input
             ref={register({ required: "Password is required" })}
             type="password"
             name="password"
             required
             placeholder="Password"
-            className="input"
+            className="input mb-5"
           />
           {errors.password?.message && (
             <FormError errorMessage={errors.password?.message} />
