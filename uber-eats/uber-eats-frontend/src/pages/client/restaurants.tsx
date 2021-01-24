@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import { CategoryItem } from "../../components/category-item";
-import { Restaurant } from "../../components/restaurant";
+import { RestaurantItem } from "../../components/restaurant-item";
 import { CATEGORY_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragments";
 import {
   restaurantsPageQuery,
@@ -88,7 +88,7 @@ export const Restaurants = () => {
           <div className="grid md:grid-cols-3 gap-y-10 gap-x-5 mt-16">
             {data?.restaurants.results?.map(
               ({ id, name, coverImg, category }) => (
-                <Restaurant
+                <RestaurantItem
                   key={id}
                   id={String(id)}
                   name={name}

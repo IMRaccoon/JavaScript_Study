@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { useHistory, useParams } from "react-router-dom";
-import { Restaurant } from "../../components/restaurant";
+import { RestaurantItem } from "../../components/restaurant-item";
 import { CATEGORY_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragments";
 import { category, categoryVariables } from "../../__generated__/category";
 
@@ -76,7 +76,7 @@ export const Category = () => {
           <div className="grid md:grid-cols-3 gap-y-10 gap-x-5 mt-16">
             {data?.category.restaurants?.map(
               ({ id, name, coverImg, category }) => (
-                <Restaurant
+                <RestaurantItem
                   key={id}
                   id={String(id)}
                   name={name}
