@@ -39,7 +39,7 @@ export const LoggedInRouter = () => {
     <Router>
       <Header />
       <Switch>
-        {data.me.role === "Client" && ClientRouter}
+        {data.me.role && ClientRouter}
         <Route>
           <NotFound />
         </Route>
