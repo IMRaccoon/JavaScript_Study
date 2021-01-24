@@ -3,9 +3,9 @@ import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
-import { Category } from "../../components/category";
+import { CategoryItem } from "../../components/category-item";
 import { Restaurant } from "../../components/restaurant";
-import { RESTAURANT_FRAGMENT } from "../../fragments";
+import { CATEGORY_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragments";
 import {
   restaurantsPageQuery,
   restaurantsPageQueryVariables,
@@ -17,11 +17,7 @@ const RESTAURANTS_QUERY = gql`
       ok
       error
       categories {
-        id
-        name
-        coverImg
-        slug
-        restaurantCount
+        ...CategoryParts
       }
     }
     restaurants(input: $input) {
@@ -35,6 +31,7 @@ const RESTAURANTS_QUERY = gql`
     }
   }
   ${RESTAURANT_FRAGMENT}
+  ${CATEGORY_FRAGMENT}
 `;
 
 interface IFormPros {
@@ -80,8 +77,9 @@ export const Restaurants = () => {
         <div className="max-w-screen-2xl mx-auto mt-8 pb-20">
           <div className="flex justify-around max-w-5xl mx-auto">
             {data?.allCategories.categories?.map((category, index) => (
-              <Category
+              <CategoryItem
                 key={index}
+                slug={category.slug}
                 name={category.name}
                 coverImg={category?.coverImg ?? ""}
               />
