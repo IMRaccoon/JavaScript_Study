@@ -1,12 +1,11 @@
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
-import { useMe } from "../hooks/useMe";
-import uberLogo from "../images/logo.svg";
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
+import { useMe } from '../hooks/useMe';
+import uberLogo from '../images/logo.svg';
 
 export const Header: React.FC = () => {
   const { data } = useMe();
-
   return (
     <>
       {!data?.me.verified && (
