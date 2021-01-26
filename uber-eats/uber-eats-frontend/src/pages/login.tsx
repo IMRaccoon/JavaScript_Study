@@ -1,18 +1,18 @@
-import { gql, useMutation } from "@apollo/client";
-import { Helmet } from "react-helmet-async";
-import { useForm } from "react-hook-form";
-import { FormError } from "../components/form-error";
+import { gql, useMutation } from '@apollo/client';
+import { Helmet } from 'react-helmet-async';
+import { useForm } from 'react-hook-form';
+import { FormError } from '../components/form-error';
 import {
   loginMutation,
   loginMutationVariables,
-} from "../__generated__/loginMutation";
-import uberLogo from "../images/logo.svg";
-import { Button } from "../components/button";
-import { Link } from "react-router-dom";
-import { authTokenVar, isLoggedInVar } from "../apollo";
-import { LOCALSTORAGE_TOKEN } from "../constants";
+} from '../__generated__/loginMutation';
+import uberLogo from '../images/logo.svg';
+import { Button } from '../components/button';
+import { Link } from 'react-router-dom';
+import { authTokenVar, isLoggedInVar } from '../apollo';
+import { LOCALSTORAGE_TOKEN } from '../constants';
 
-const LOGIN_MUTATION = gql`
+export const LOGIN_MUTATION = gql`
   mutation loginMutation($loginInput: LoginInput!) {
     login(input: $loginInput) {
       ok
@@ -34,7 +34,7 @@ export const Login = () => {
     errors,
     handleSubmit,
     formState,
-  } = useForm<ILoginForm>({ mode: "onChange" });
+  } = useForm<ILoginForm>({ mode: 'onChange' });
   const onCompleted = ({ login: { ok, token } }: loginMutation) => {
     if (ok && token) {
       localStorage.setItem(LOCALSTORAGE_TOKEN, token);
@@ -69,7 +69,7 @@ export const Login = () => {
         >
           <input
             ref={register({
-              required: "Email is required",
+              required: 'Email is required',
               // eslint-disable-next-line no-useless-escape
               pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             })}
@@ -82,11 +82,11 @@ export const Login = () => {
           {errors.email?.message && (
             <FormError errorMessage={errors.email?.message} />
           )}
-          {errors.email?.type === "pattern" && (
+          {errors.email?.type === 'pattern' && (
             <FormError errorMessage="Please enter a valid email" />
           )}
           <input
-            ref={register({ required: "Password is required" })}
+            ref={register({ required: 'Password is required' })}
             type="password"
             name="password"
             required
@@ -95,9 +95,6 @@ export const Login = () => {
           />
           {errors.password?.message && (
             <FormError errorMessage={errors.password?.message} />
-          )}
-          {errors.password?.type === "minLength" && (
-            <FormError errorMessage="Password must be for than 10 chars." />
           )}
           <Button
             canClick={formState.isValid}
@@ -109,7 +106,7 @@ export const Login = () => {
           )}
         </form>
         <div>
-          New to Uber?{" "}
+          New to Uber?{' '}
           <Link to="/create-account" className="text-lime-600 hover:underline">
             Create an Account
           </Link>

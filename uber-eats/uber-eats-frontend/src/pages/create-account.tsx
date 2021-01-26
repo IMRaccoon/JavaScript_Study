@@ -1,17 +1,17 @@
-import { gql, useMutation } from "@apollo/client";
-import { Helmet } from "react-helmet-async";
-import { useForm } from "react-hook-form";
-import { Link, useHistory } from "react-router-dom";
-import { Button } from "../components/button";
-import { FormError } from "../components/form-error";
-import uberLogo from "../images/logo.svg";
+import { gql, useMutation } from '@apollo/client';
+import { Helmet } from 'react-helmet-async';
+import { useForm } from 'react-hook-form';
+import { Link, useHistory } from 'react-router-dom';
+import { Button } from '../components/button';
+import { FormError } from '../components/form-error';
+import uberLogo from '../images/logo.svg';
 import {
   createAccountMutation,
   createAccountMutationVariables,
-} from "../__generated__/createAccountMutation";
-import { UserRole } from "../__generated__/globalTypes";
+} from '../__generated__/createAccountMutation';
+import { UserRole } from '../__generated__/globalTypes';
 
-const CREATE_ACCOUNT_MUTATION = gql`
+export const CREATE_ACCOUNT_MUTATION = gql`
   mutation createAccountMutation($createAccountInput: CreateAccountInput!) {
     createAccount(input: $createAccountInput) {
       ok
@@ -34,14 +34,14 @@ export const CreateAccount = () => {
     handleSubmit,
     formState,
   } = useForm<ICreateAccountForm>({
-    mode: "onChange",
+    mode: 'onChange',
     defaultValues: { role: UserRole.Client },
   });
   const history = useHistory();
   const onCompleted = ({ createAccount: { ok } }: createAccountMutation) => {
     if (ok) {
-      alert("Account Created! Log in now!");
-      history.push("/");
+      alert('Account Created! Log in now!');
+      history.push('/');
     }
   };
 
@@ -50,7 +50,7 @@ export const CreateAccount = () => {
     { data: createAccountMutationResult, loading },
   ] = useMutation<createAccountMutation, createAccountMutationVariables>(
     CREATE_ACCOUNT_MUTATION,
-    { onCompleted }
+    { onCompleted },
   );
 
   const onSubmit = () => {
@@ -78,7 +78,7 @@ export const CreateAccount = () => {
         >
           <input
             ref={register({
-              required: "Email is required",
+              required: 'Email is required',
               // eslint-disable-next-line no-useless-escape
               pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             })}
@@ -91,11 +91,11 @@ export const CreateAccount = () => {
           {errors.email?.message && (
             <FormError errorMessage={errors.email?.message} />
           )}
-          {errors.email?.type === "pattern" && (
+          {errors.email?.type === 'pattern' && (
             <FormError errorMessage="Please enter a valid email" />
           )}
           <input
-            ref={register({ required: "Password is required" })}
+            ref={register({ required: 'Password is required' })}
             type="password"
             name="password"
             required
@@ -105,7 +105,7 @@ export const CreateAccount = () => {
           {errors.password?.message && (
             <FormError errorMessage={errors.password?.message} />
           )}
-          {errors.password?.type === "minLength" && (
+          {errors.password?.type === 'minLength' && (
             <FormError errorMessage="Password must be for than 10 chars." />
           )}
           <select
@@ -129,7 +129,7 @@ export const CreateAccount = () => {
           )}
         </form>
         <div>
-          Already have an account?{" "}
+          Already have an account?{' '}
           <Link to="/" className="text-lime-600 hover:underline">
             Log in now
           </Link>
