@@ -105,9 +105,6 @@ export const CreateAccount = () => {
           {errors.password?.message && (
             <FormError errorMessage={errors.password?.message} />
           )}
-          {errors.password?.type === 'minLength' && (
-            <FormError errorMessage="Password must be for than 10 chars." />
-          )}
           <select
             name="role"
             ref={register({ required: true })}
