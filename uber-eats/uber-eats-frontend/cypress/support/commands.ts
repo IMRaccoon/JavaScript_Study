@@ -33,13 +33,13 @@ Cypress.Commands.add('assertLoggedOut', () => {
   cy.window().its('localStorage.uber-token').should('be.undefined');
 });
 
-Cypress.Commands.add('login', (email, password) => {
+Cypress.Commands.add('login', () => {
   cy.visit('/');
   // @ts-ignore
   cy.assertLoggedOut();
   cy.title().should('eq', 'Login | Uber Eats');
-  cy.findByPlaceholderText(/email/i).type(email);
-  cy.findByPlaceholderText(/password/i).type(password);
+  cy.findByPlaceholderText(/email/i).type('test1@test.com');
+  cy.findByPlaceholderText(/password/i).type('test');
   cy.findByRole('button')
     .should('not.have.class', 'pointer-events-none')
     .click();

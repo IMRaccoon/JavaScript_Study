@@ -20,6 +20,6 @@ describe('Login', () => {
 
   it('can fill out the form and log in', () => {
     // @ts-ignore
-    user.login('test1@test.com', 'test');
+    user.login();
   });
 });

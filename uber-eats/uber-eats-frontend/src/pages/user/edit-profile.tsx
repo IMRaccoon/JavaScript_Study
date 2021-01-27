@@ -1,11 +1,12 @@
-import { gql, useApolloClient, useMutation } from "@apollo/client";
-import { useForm } from "react-hook-form";
-import { Button } from "../../components/button";
-import { useMe } from "../../hooks/useMe";
+import { gql, useApolloClient, useMutation } from '@apollo/client';
+import { Helmet } from 'react-helmet-async';
+import { useForm } from 'react-hook-form';
+import { Button } from '../../components/button';
+import { useMe } from '../../hooks/useMe';
 import {
   editProfile,
   editProfileVariables,
-} from "../../__generated__/editProfile";
+} from '../../__generated__/editProfile';
 
 const EDIT_PROFILE_MUTATION = gql`
   mutation editProfile($input: EditProfileInput!) {
@@ -53,18 +54,21 @@ export const EditProfile = () => {
     editProfileVariables
   >(EDIT_PROFILE_MUTATION, { onCompleted });
   const { register, handleSubmit, getValues, formState } = useForm<IFormProps>({
-    mode: "onChange",
+    mode: 'onChange',
     defaultValues: { email: userData?.me.email },
   });
   const onSubmit = () => {
     const { email, password } = getValues();
     editProfile({
-      variables: { input: { email, ...(password !== "" && { password }) } },
+      variables: { input: { email, ...(password !== '' && { password }) } },
     });
   };
 
   return (
     <div className="mt-52 flex flex-col justify-center items-center">
+      <Helmet>
+        <title>Edit Profile | Uber Eats</title>
+      </Helmet>
       <h4 className="font-semibold text-2xl mb-3">Edit Profile</h4>
       <form
         onSubmit={handleSubmit(onSubmit)}

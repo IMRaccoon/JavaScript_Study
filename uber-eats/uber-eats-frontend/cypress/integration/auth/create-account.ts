@@ -22,17 +22,7 @@ describe('Create Account', () => {
       const { operationName } = req.body;
 
       if (operationName && operationName === 'createAccountMutation') {
-        req.reply((res) =>
-          res.send({
-            data: {
-              createAccount: {
-                ok: true,
-                error: null,
-                __typename: 'CreateAccountOutput',
-              },
-            },
-          }),
-        );
+        req.reply((res) => res.send({ fixture: 'auth/create-account.json' }));
       }
     });
 
@@ -44,7 +34,7 @@ describe('Create Account', () => {
     user.title().should('eq', 'Login | Uber Eats');
 
     // @ts-ignore
-    user.login('test1@test.com', 'test');
+    user.login();
     // @ts-ignore
     user.assertLoggedIn();
   });
