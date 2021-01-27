@@ -1,4 +1,4 @@
-describe('Login Page', () => {
+describe('Login', () => {
   const user = cy;
   it('should see login page', () => {
     user.visit('/').title().should('eq', 'Login | Uber Eats');
