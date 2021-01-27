@@ -18,16 +18,8 @@ describe('Login', () => {
     user.findByRole(/alert/i).should('have.text', 'Password is required');
   });
 
-  it('can fill out the form', () => {
-    user
-      .visit('/')
-      .get('[type="email"]')
-      .type('test1@test.com')
-      .get('[name="password"]')
-      .type('test')
-      .get('.text-lg')
-      .should('not.have.class', 'pointer-events-none')
-      .click();
-    user.window().its('localStorage.uber-token').should('be.a', 'string');
+  it('can fill out the form and log in', () => {
+    // @ts-ignore
+    user.login('test1@test.com', 'test');
   });
 });

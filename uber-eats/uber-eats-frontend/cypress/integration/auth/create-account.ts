@@ -43,9 +43,9 @@ describe('Create Account', () => {
     user.wait(1000);
     user.title().should('eq', 'Login | Uber Eats');
 
-    user.findByPlaceholderText(/email/i).type('test1@test.com');
-    user.findByPlaceholderText(/password/i).type('test');
-    user.findByRole('button').click();
-    user.window().its('localStorage.uber-token').should('be.a', 'string');
+    // @ts-ignore
+    user.login('test1@test.com', 'test');
+    // @ts-ignore
+    user.assertLoggedIn();
   });
 });
