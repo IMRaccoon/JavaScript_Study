@@ -17,6 +17,7 @@ import { Category } from './restaurants/entities/category.entity';
 import { Dish } from './restaurants/entities/dish.entity';
 import { Restaurant } from './restaurants/entities/restaurant.entity';
 import { RestaurantsModule } from './restaurants/restaurants.module';
+import { UploadsModule } from './uploads/uploads.module';
 import { User } from './users/entities/user.entity';
 import { Verification } from './users/entities/verification.entity';
 import { UsersModule } from './users/users.module';
@@ -84,6 +85,7 @@ import { UsersModule } from './users/users.module';
     OrdersModule,
     CommonModule,
     PaymentsModule,
+    UploadsModule,
   ],
   controllers: [],
   providers: [],
