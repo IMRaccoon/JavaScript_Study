@@ -17,6 +17,7 @@ import {
 } from './dto/delete-restaurant.dto';
 import { EditDishInput, EditDishOutput } from './dto/edit-dish.dto';
 import { EditRestaurantInput } from './dto/edit-restaurant.dto';
+import { MyRestaurantInput, MyRestaurantOutput } from './dto/my-restaurant.dto';
 import { MyRestaurantsOutput } from './dto/my-restaurants.dto';
 import { RestaurantInput, RestaurantOutput } from './dto/restaurant.dto';
 import { RestaurantsInput, RestaurantsOutput } from './dto/restaurants.dto';
@@ -51,7 +52,7 @@ export class RestaurantsService {
       );
       newRestaurant.category = category;
       await this.restaurants.save(newRestaurant);
-      return { ok: true };
+      return { ok: true, restaurantId: newRestaurant.id };
     } catch {
       return {
         ok: false,
@@ -66,6 +67,21 @@ export class RestaurantsService {
       return { ok: true, restaurants };
     } catch {
       return { ok: false, error: 'Could not find restaurant' };
+    }
+  }
+
+  async myRestaurant(
+    owner: User,
+    { id }: MyRestaurantInput,
+  ): Promise<MyRestaurantOutput> {
+    try {
+      const restaurant = await this.restaurants.findOne({ id, owner });
+      if (!restaurant) {
+        return { ok: false, error: 'Could not find Restaurant' };
+      }
+      return { ok: true, restaurant };
+    } catch {
+      return { ok: false, error: 'Could not find Restaurant' };
     }
   }
 
