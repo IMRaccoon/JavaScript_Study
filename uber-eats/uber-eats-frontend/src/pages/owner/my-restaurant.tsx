@@ -1,54 +1,72 @@
-import { gql, useQuery } from "@apollo/client";
-import React from "react";
-import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
-import { RestaurantItem } from "../../components/restaurant-item";
-import { RESTAURANT_FRAGMENT } from "../../fragments";
-import { myRestaurants } from "../../__generated__/myRestaurants";
+import { gql, useQuery } from '@apollo/client';
+import React from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { DISH_FRAGMENT, RESTAURANT_FRAGMENT } from '../../fragments';
+import {
+  myRestaurant,
+  myRestaurantVariables,
+} from '../../__generated__/myRestaurant';
 
-export const MY_RESTAURANTS_QUERY = gql`
-  query myRestaurants {
-    myRestaurants {
+export const MY_RESTAURANT_QUERY = gql`
+  query myRestaurant($input: MyRestaurantInput!) {
+    myRestaurant(input: $input) {
       ok
       error
-      restaurants {
+      restaurant {
         ...RestaurantParts
+        menu {
+          ...DishParts
+        }
       }
     }
   }
   ${RESTAURANT_FRAGMENT}
+  ${DISH_FRAGMENT}
 `;
 
-export const MyRestaurants = () => {
-  const { data } = useQuery<myRestaurants>(MY_RESTAURANTS_QUERY);
+interface IParams {
+  id: string;
+}
+
+export const MyRestaurant = () => {
+  const { id } = useParams<IParams>();
+  const { data } = useQuery<myRestaurant, myRestaurantVariables>(
+    MY_RESTAURANT_QUERY,
+    {
+      variables: {
+        input: {
+          id: +id,
+        },
+      },
+    },
+  );
+
   return (
     <div>
-      <Helmet>
-        <title>My Restaurants | Uber Eats</title>
-      </Helmet>
-      <div className="container mt-32">
-        <h2 className="text-4xl font-medium ub-10">My Restaurants</h2>
-        {data?.myRestaurants.ok &&
-        data.myRestaurants.restaurants.length === 0 ? (
-          <>
-            <h4 className="text-xl mb-5">You have no restaurants</h4>
-            <Link className="link" to="/add-restaurant">
-              Create one &rarr;
-            </Link>
-          </>
-        ) : (
-          <div className="grid md:grid-cols-3 gap-y-10 gap-x-5 mt-16">
-            {data?.myRestaurants.restaurants.map((restaurant) => (
-              <RestaurantItem
-                name={restaurant.name}
-                key={String(restaurant.id)}
-                id={String(restaurant.id)}
-                coverImg={restaurant.coverImg}
-                categoryName={restaurant?.category?.name}
-              />
-            ))}
-          </div>
-        )}
+      <div
+        className="bg-gray-700 py-28 bg-center bg-cover"
+        style={{
+          backgroundImage: `url(${data?.myRestaurant.restaurant?.coverImg})`,
+        }}
+      ></div>
+      <div className="container mt-10">
+        <h2 className="text-4xl font-medium mb-10">
+          {data?.myRestaurant.restaurant?.name || 'Loading...'}
+        </h2>
+        <Link
+          to={`/restaurants/${id}/add-dish`}
+          className="mr-8 text-white bg-gray-800 py-3 px-10"
+        >
+          Add Dish &rarr;
+        </Link>
+        <Link to={``} className="text-white bg-lime-700 py-3 px-10">
+          Buy Promotion &rarr;
+        </Link>
+        <div className="mt-10">
+          {data?.myRestaurant.restaurant?.menu.length === 0 ? (
+            <h4 className="text-xl mb-5">Please upload a dish!</h4>
+          ) : null}
+        </div>
       </div>
     </div>
   );

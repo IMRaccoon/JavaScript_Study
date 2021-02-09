@@ -1,15 +1,15 @@
-import { gql, useApolloClient, useMutation } from "@apollo/client";
-import React, { useState } from "react";
-import { Helmet } from "react-helmet-async";
-import { useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
-import { Button } from "../../components/button";
-import { FormError } from "../../components/form-error";
+import { gql, useApolloClient, useMutation } from '@apollo/client';
+import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
+import { Button } from '../../components/button';
+import { FormError } from '../../components/form-error';
 import {
   createRestaurant,
   createRestaurantVariables,
-} from "../../__generated__/createRestaurant";
-import { MY_RESTAURANTS_QUERY } from "./my-restaurant";
+} from '../../__generated__/createRestaurant';
+import { MY_RESTAURANTS_QUERY } from './my-restaurants';
 
 const CREATE_RESTAURANT_MUTATION = gql`
   mutation createRestaurant($input: CreateRestaurantInput!) {
@@ -30,7 +30,7 @@ interface IFormProps {
 
 export const AddRestaurant = () => {
   const [uploading, setUploading] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState('');
   const history = useHistory();
   const client = useApolloClient();
 
@@ -54,13 +54,13 @@ export const AddRestaurant = () => {
                 address,
                 category: {
                   name: categoryName,
-                  __typename: "Category",
+                  __typename: 'Category',
                 },
                 coverImg: imageUrl,
                 id: restaurantId,
                 isPromoted: false,
                 name,
-                __typename: "Restaurant",
+                __typename: 'Restaurant',
               },
               ...queryResult.myRestaurants.restaurants,
             ],
@@ -68,7 +68,7 @@ export const AddRestaurant = () => {
         },
       });
 
-      history.push("/");
+      history.push('/');
     }
   };
 
@@ -80,7 +80,7 @@ export const AddRestaurant = () => {
   });
 
   const { register, getValues, formState, handleSubmit } = useForm<IFormProps>({
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   const onSubmit = async () => {
@@ -89,10 +89,10 @@ export const AddRestaurant = () => {
       const { file, name, categoryName, address } = getValues();
       const actualFile = file[0];
       const formBody = new FormData();
-      formBody.append("file", actualFile);
+      formBody.append('file', actualFile);
       const { url: coverImg } = await (
-        await fetch("http://localhost:4000/uploads", {
-          method: "POST",
+        await fetch('http://localhost:4000/uploads', {
+          method: 'POST',
           body: formBody,
         })
       ).json();
@@ -118,21 +118,21 @@ export const AddRestaurant = () => {
           type="text"
           name="name"
           placeholder="Name"
-          ref={register({ required: "Name is required" })}
+          ref={register({ required: 'Name is required' })}
         />
         <input
           className="input"
           type="text"
           name="address"
           placeholder="Address"
-          ref={register({ required: "Address is required" })}
+          ref={register({ required: 'Address is required' })}
         />
         <input
           className="input"
           type="text"
           name="categoryName"
           placeholder="Category Name"
-          ref={register({ required: "Category Name is required" })}
+          ref={register({ required: 'Category Name is required' })}
         />
         <div>
           <input
