@@ -61,3 +61,12 @@ nodejs 또는 Typescript에서 사용하는 모듈들을 테스트, 스터디 �
 
 - 참고: https://nomadcoders.co/nuber-eats/lobby
 - [코드](./uber-eats)
+
+<br />
+
+### Lerna Tutorial (Mono Repo)
+
+- Language: NodeJS
+- Lerna Independent Mode Tutorial
+- 참고: https://kdydesign.github.io/2020/08/27/mono-repo-lerna-example/
+- [코드](./lerna-independant)
