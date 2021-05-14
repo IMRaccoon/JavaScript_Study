@@ -1,7 +1,22 @@
 import { gql, useQuery } from '@apollo/client';
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Link, useParams } from 'react-router-dom';
-import { DISH_FRAGMENT, RESTAURANT_FRAGMENT } from '../../fragments';
+import {
+  VictoryAxis,
+  VictoryChart,
+  VictoryLabel,
+  VictoryLine,
+  VictoryTheme,
+  VictoryTooltip,
+  VictoryVoronoiContainer,
+} from 'victory';
+import { Dish } from '../../components/dish';
+import {
+  DISH_FRAGMENT,
+  ORDERS_FRAGMENT,
+  RESTAURANT_FRAGMENT,
+} from '../../fragments';
 import {
   myRestaurant,
   myRestaurantVariables,
@@ -17,11 +32,15 @@ export const MY_RESTAURANT_QUERY = gql`
         menu {
           ...DishParts
         }
+        orders {
+          ...OrderParts
+        }
       }
     }
   }
   ${RESTAURANT_FRAGMENT}
   ${DISH_FRAGMENT}
+  ${ORDERS_FRAGMENT}
 `;
 
 interface IParams {
@@ -43,6 +62,12 @@ export const MyRestaurant = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>
+          {data?.myRestaurant.restaurant?.name || 'Loading...'} | Uber Eats
+        </title>
+        <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
+      </Helmet>
       <div
         className="bg-gray-700 py-28 bg-center bg-cover"
         style={{
@@ -65,7 +90,51 @@ export const MyRestaurant = () => {
         <div className="mt-10">
           {data?.myRestaurant.restaurant?.menu.length === 0 ? (
             <h4 className="text-xl mb-5">Please upload a dish!</h4>
-          ) : null}
+          ) : (
+            <div className="grid mt-16 md:grid-cols-3 gap-x-5 gap-y-10">
+              {data?.myRestaurant.restaurant?.menu.map((dish) => (
+                <Dish
+                  name={dish.name}
+                  description={dish.description}
+                  price={dish.price}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="mt-20 mb-10">
+          <h4 className="text-center text-2xl font-medium">Sales</h4>
+          <div className="mt-10">
+            <VictoryChart
+              width={window.innerWidth}
+              height={500}
+              domainPadding={50}
+              containerComponent={<VictoryVoronoiContainer />}
+              theme={VictoryTheme.material}
+            >
+              <VictoryLine
+                labels={({ datum }) => `$${datum.y}`}
+                labelComponent={
+                  <VictoryTooltip
+                    renderInPortal
+                    style={{ font: 10 }}
+                    dy={-20}
+                  />
+                }
+                data={data?.myRestaurant.restaurant?.orders.map((order) => ({
+                  x: order.createdAt,
+                  y: order.total,
+                }))}
+                interpolation="natural"
+                style={{ data: { strokeWidth: 5 } }}
+              />
+              <VictoryAxis
+                tickLabelComponent={<VictoryLabel renderInPortal />}
+                style={{ tickLabels: { fontSize: 12, angle: 45 } }}
+                tickFormat={(step) => new Date(step).toLocaleDateString('ko')}
+              />
+            </VictoryChart>
+          </div>
         </div>
       </div>
     </div>
